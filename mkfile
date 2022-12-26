@@ -13,7 +13,7 @@ OFILES=\
 	dirpanel.$O		\
 	viewercmd.$O	\
 	text.$O			\
-	alert.$O		\
+	message.$O		\
 	glob.$O			\
 	utils.$O
 

@@ -7,7 +7,6 @@
 #include <plumb.h>
 #include <bio.h>
 
-
 typedef struct Dirview Dirview;
 typedef struct Dirpanel Dirpanel;
 typedef struct Dirmodel Dirmodel;
@@ -95,6 +94,17 @@ struct Binding
 	Action	f;
 };
 
+enum{
+	Dinfo,
+	Derror,
+	Dconfirm,
+};
+
+enum{
+	Bno,
+	Byes,
+};
+
 Dirview*	mkdirview(char*);
 void		dirviewsetrect(Dirview*, Rectangle);
 void		dirviewredraw(Dirview*);
@@ -137,7 +147,7 @@ void		setupviewerbindings(void);
 
 int			match(char*, char*);
 
-void		alert(const char*, const char*, const char*, Mousectl*, Keyboardctl*);
+int			message(int, const char*, Mousectl*, Keyboardctl*);
 
 Rectangle	boundsrect(Rectangle);
 Image*		ealloccolor(ulong);
@@ -163,6 +173,7 @@ enum
 	Ctitle,
 	Cborder,
 	Csel,
+	Cerror,
 	Cdialog,
 	Ncols
 };

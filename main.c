@@ -18,7 +18,8 @@ colsinit(void)
 	cols[Ctitle] = ealloccolor(DGreygreen);
 	cols[Cborder] = ealloccolor(0xAAAAAAFF);
 	cols[Csel] = ealloccolor(0xCCCCCCFF);
-	cols[Cdialog] = ealloccolor(0xF4F4F4FF);
+	cols[Cerror] = ealloccolor(0x721c24ff);
+	cols[Cdialog] = ealloccolor(0xFAFAFAFF);
 }
 
 void
