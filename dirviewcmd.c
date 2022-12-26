@@ -147,6 +147,18 @@ cmdcd(void)
 }
 
 static void
+cmdcdmatch(void)
+{
+	Dirpanel *o;
+	char *path;
+
+	path = dirviewcurrentpanel(dview)->model->path;
+	o = dirviewotherpanel(dview);
+	dirpanelresetcursor(o);
+	dirmodelcd(o->model, path);
+}
+
+static void
 cmdselectgroup(void)
 {
 	Dirpanel *p;
@@ -347,6 +359,7 @@ Binding	dirviewbindings[] = {
 	{ '\t',		cmdswitchfocus },
 	{ 'r',		cmdreload },
 	{ 'c',		cmdcd },
+	{ '=',		cmdcdmatch },
 	{ '\n',		cmdview },
 	{ '+',		cmdselectgroup },
 	{ '-',		cmdunselectgroup },
