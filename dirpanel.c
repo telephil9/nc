@@ -37,6 +37,7 @@ dirpanelsetrect(Dirpanel *p, Rectangle r)
 	p->titler.max.y = p->titler.min.y + 2 + font->height + 2;
 	p->filesr = p->intr;
 	p->filesr.min.y = p->titler.max.y;
+	p->filesr.max.y -= 1;
 	p->nlines = Dy(p->filesr) / (font->height + 2);
 }
 
