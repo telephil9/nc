@@ -5,6 +5,7 @@ TARG=nc
 HFILES=a.h
 OFILES=\
 	main.$O			\
+	help.$O			\
 	actionbar.$O	\
 	dirview.$O		\
 	dirviewcmd.$O	\

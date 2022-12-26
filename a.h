@@ -174,4 +174,4 @@ extern Dirview*		dview;
 extern Text*		text;
 extern Actionbar*	abar;
 extern Binding*		bindings;
-extern char*		help;
+extern char			help[];

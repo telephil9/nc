@@ -8,9 +8,6 @@ Dirview		*dview;
 Text		*text;
 Actionbar	*abar;
 Binding		*bindings;
-char*		help = 
-	"nein commander\n"
-	"A file manager for 9front\n";
 
 void
 colsinit(void)
