@@ -3,6 +3,8 @@ nc
 nein commander is a two-pane file manager for plan9 inspired by the likes of midnight commander.
 nc is mainly keyboard-driven, see the internal help for a list of available shortcuts.
 
+![screenshot](screenshot.png)
+
 Installation:
 -------------
 ```sh
