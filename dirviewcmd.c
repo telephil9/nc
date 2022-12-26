@@ -58,12 +58,16 @@ cmdrenmov(void)
 {
 	Dirpanel *p;
 	Dir d, null;
-	char opath[1024] = {0}, buf[255] = {0};
+	char errbuf[ERRMAX], opath[1024] = {0}, buf[255] = {0};
 	int n;
 
 	p = dirviewcurrentpanel(dview);
 	if(strcmp(p->model->path, dirviewotherpanel(dview)->model->path) == 0){
 		d = dirmodelgetdir(p->model, dirpanelselectedindex(p));
+		if(d.qid.type&QTDIR){
+			alert("Error", "Cannot rename directories.", nil, mc, kc);
+			return;
+		}
 		snprint(buf, sizeof buf, d.name);
 		if((n = enter("rename:", buf, sizeof buf, mc, kc, nil)) <= 0)
 			return;
@@ -72,9 +76,10 @@ cmdrenmov(void)
 		snprint(opath, sizeof opath, "%s/%s", p->model->path, d.name);
 		nulldir(&null);
 		null.name = buf;
-		if(dirwstat(opath, &null) < 0)
-			fprint(2, "rename failed: %r\n");
-		else{
+		if(dirwstat(opath, &null) < 0){
+			errstr(errbuf, ERRMAX-1);
+			alert("Error", "Rename failed", errbuf, mc, kc);
+		}else{
 			dirmodelreload(p->model);
 			dirmodelreload(dirviewotherpanel(dview)->model);
 		}			

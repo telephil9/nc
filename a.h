@@ -137,6 +137,8 @@ void		setupviewerbindings(void);
 
 int			match(char*, char*);
 
+void		alert(const char*, const char*, const char*, Mousectl*, Keyboardctl*);
+
 Rectangle	boundsrect(Rectangle);
 Image*		ealloccolor(ulong);
 void*		emalloc(ulong);
@@ -161,6 +163,7 @@ enum
 	Ctitle,
 	Cborder,
 	Csel,
+	Cdialog,
 	Ncols
 };
 extern Image*		cols[Ncols];
