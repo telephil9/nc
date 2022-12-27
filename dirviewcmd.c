@@ -69,7 +69,7 @@ cmdrenmov(void)
 			return;
 		}
 		snprint(buf, sizeof buf, d.name);
-		if((n = enter("rename:", buf, sizeof buf, mc, kc, nil)) <= 0)
+		if((n = input("rename to:", buf, sizeof buf, mc, kc)) <= 0)
 			return;
 		if(strncmp(buf, d.name, n) == 0)
 			return;
@@ -93,7 +93,7 @@ cmdmkdir(void)
 	char buf[1024] = {0};
 
 	p = dirviewcurrentpanel(dview);
-	if(enter("new dir:", buf, sizeof buf, mc, kc, nil) <= 0)
+	if(input("create directory:", buf, sizeof buf, mc, kc) <= 0)
 		return;
 	if(mkdir(p->model->path, buf) < 0){
 		errormessage("directory creation failed: %r", mc, kc);
@@ -174,7 +174,7 @@ cmdcd(void)
 	char buf[1024] = {0};
 
 	p = dirviewcurrentpanel(dview);
-	if(enter("cd:", buf, sizeof buf, mc, kc, nil) <= 0)
+	if(input("go to directory:", buf, sizeof buf, mc, kc) <= 0)
 		return;
 	dirpanelresetcursor(p);
 	dirmodelcd(p->model, buf);
@@ -201,7 +201,7 @@ cmdselectgroup(void)
 	char buf[256] = {0};
 
 	p = dirviewcurrentpanel(dview);
-	if(enter("select:", buf, sizeof(buf), mc, kc, nil) <= 0)
+	if(input("select pattern:", buf, sizeof(buf), mc, kc) <= 0)
 		return;
 	for(i = !p->model->isroot; i < dirmodelcount(p->model); i++){
 		d = dirmodelgetdir(p->model, i);
@@ -219,7 +219,7 @@ cmdunselectgroup(void)
 	char buf[256] = {0};
 
 	p = dirviewcurrentpanel(dview);
-	if(enter("unselect:", buf, sizeof(buf), mc, kc, nil) <= 0)
+	if(input("unselect pattern:", buf, sizeof(buf), mc, kc) <= 0)
 		return;
 	r = 0;
 	for(i = !p->model->isroot; i < dirmodelcount(p->model); i++){
@@ -279,7 +279,7 @@ cmdfilter(void)
 	char buf[256] = {0};
 
 	p = dirviewcurrentpanel(dview);
-	if(enter("filter:", buf, sizeof buf, mc, kc, nil) <= 0){
+	if(input("filter pattern:", buf, sizeof buf, mc, kc) <= 0){
 		if(p->model->filter != nil){
 			dirpanelresetcursor(p);
 			dirmodelfilter(p->model, nil);
