@@ -44,6 +44,7 @@ char help[] =
 	"Key bindings:\n"
 	"  Enter - view file content or visit directory.\n"
 	"  c     - change current directory (accepts relative or absolute paths).\n"
+	"  C     - change current directory of other panel.\n"
 	"  =     - change other panel directory to current one.\n"
 	"  F1    - this help screen.\n"
 	"  F3    - view file content or visit directory.\n"

@@ -181,6 +181,19 @@ cmdcd(void)
 }
 
 static void
+cmdcdo(void)
+{
+	Dirpanel *p;
+	char buf[1024] = {0};
+
+	p = dirviewotherpanel(dview);
+	if(input("go to directory:", buf, sizeof buf, mc, kc) <= 0)
+		return;
+	dirpanelresetcursor(p);
+	dirmodelcd(p->model, buf);
+}
+
+static void
 cmdcdmatch(void)
 {
 	Dirpanel *o;
@@ -393,6 +406,7 @@ Binding	dirviewbindings[] = {
 	{ '\t',		cmdswitchfocus },
 	{ 'r',		cmdreload },
 	{ 'c',		cmdcd },
+	{ 'C',		cmdcdo },
 	{ '=',		cmdcdmatch },
 	{ '\n',		cmdview },
 	{ '+',		cmdselectgroup },
