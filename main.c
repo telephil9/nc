@@ -1,6 +1,7 @@
 #include "a.h"
 
 Image		*cols[Ncols];
+Image		*tick;
 Mousectl	*mc;
 Keyboardctl	*kc;
 int			mode;
@@ -20,6 +21,20 @@ colsinit(void)
 	cols[Csel] = ealloccolor(0xCCCCCCFF);
 	cols[Cerror] = ealloccolor(0x721c24ff);
 	cols[Cdialog] = ealloccolor(0xFAFAFAFF);
+}
+
+void
+tickinit(void)
+{
+	enum { Tickw = 3 };
+
+	tick = allocimage(display, Rect(0, 0, Tickw, font->height), screen->chan, 0, DWhite);
+	if(tick == nil)
+		sysfatal("allocimage: %r");
+	draw(tick, tick->r, cols[Cbg], nil, ZP);
+	draw(tick, Rect(Tickw/2, 0, Tickw/2+1, font->height), cols[Cfg], nil, ZP);
+	draw(tick, Rect(0, 0, Tickw, Tickw), cols[Cfg], nil, ZP);
+	draw(tick, Rect(0, font->height-Tickw, Tickw, font->height), cols[Cfg], nil, ZP);
 }
 
 void
@@ -144,6 +159,7 @@ threadmain(int argc, char **argv)
 	text = mktext();
 	abar = mkactionbar();
 	colsinit();
+	tickinit();
 	resize();
 	setmode(Mdir);
 	alts[Emouse].c = mc->c;

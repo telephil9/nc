@@ -14,6 +14,7 @@ OFILES=\
 	viewercmd.$O	\
 	text.$O			\
 	message.$O		\
+	input.$O		\
 	glob.$O			\
 	fops.$O			\
 	utils.$O

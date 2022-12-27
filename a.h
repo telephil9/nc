@@ -6,6 +6,7 @@
 #include <thread.h>
 #include <plumb.h>
 #include <bio.h>
+#include <ctype.h>
 
 typedef struct Dirview Dirview;
 typedef struct Dirpanel Dirpanel;
@@ -151,6 +152,7 @@ int			match(char*, char*);
 
 int			message(int, const char*, Mousectl*, Keyboardctl*);
 void		errormessage(char*, Mousectl*, Keyboardctl*);
+int			input(char*, char*, int, Mousectl*, Keyboardctl*);
 
 int			mkdir(char*, char*);
 int			rm(char*, Dir);
@@ -184,6 +186,7 @@ enum
 	Ncols
 };
 extern Image*		cols[Ncols];
+extern Image*		tick;
 extern Mousectl*	mc;
 extern Keyboardctl*	kc;
 extern int			mode;
