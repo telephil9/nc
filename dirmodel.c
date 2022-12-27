@@ -3,11 +3,19 @@
 static int
 dircmpname(Dir *a, Dir *b)
 {
-	if(a->qid.type == b->qid.type)
-		return strcmp(a->name, b->name);
-	if(a->qid.type&QTDIR)
-		return -1;
-	return 1;
+	int cmp;
+
+	if(a->qid.type&QTDIR){
+		if(b->qid.type&QTDIR)
+			cmp = strcmp(a->name, b->name);
+		else
+			cmp = -1;	
+	}else if(b->qid.type&QTDIR){
+		cmp = 1;
+	}else{
+		cmp = strcmp(a->name, b->name);
+	}
+	return cmp;
 } 
 
 static void
