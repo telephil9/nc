@@ -109,7 +109,7 @@ enum
 void
 threadmain(int argc, char **argv)
 {
-	char *home;
+	char *home, pwd[1024] = {0};
 	Mouse m;
 	Rune k;
 	ulong l;
@@ -138,7 +138,9 @@ threadmain(int argc, char **argv)
 		sysfatal("initkdb: %r");
 	display->locking = 0;
 	home = homedir();
-	dview = mkdirview(home);
+	if(getwd(pwd, sizeof pwd) == nil)
+		strncpy(pwd, home, strlen(home));
+	dview = mkdirview(pwd, home);
 	text = mktext();
 	abar = mkactionbar();
 	colsinit();

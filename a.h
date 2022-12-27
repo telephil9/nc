@@ -105,7 +105,7 @@ enum{
 	Byes,
 };
 
-Dirview*	mkdirview(char*);
+Dirview*	mkdirview(char*, char*);
 void		dirviewsetrect(Dirview*, Rectangle);
 void		dirviewredraw(Dirview*);
 void		dirviewemouse(Dirview*, Mouse);

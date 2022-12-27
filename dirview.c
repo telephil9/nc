@@ -57,7 +57,7 @@ dirviewemouse(Dirview *v, Mouse m)
 }
 
 Dirview*
-mkdirview(char *path)
+mkdirview(char *lpath, char *rpath)
 {
 	Dirview *dv;
 	Dirmodel *m;
@@ -65,10 +65,10 @@ mkdirview(char *path)
 	dv = emalloc(sizeof *dv);
 	dv->c = chancreate(sizeof(ulong), 1);
 	dv->b = nil;
-	m = mkdirmodel(path);
+	m = mkdirmodel(lpath);
 	dv->leftp = mkdirpanel(m);
 	dv->leftp->focused = 1;
-	m = mkdirmodel(path);
+	m = mkdirmodel(rpath);
 	dv->rightp = mkdirpanel(m);
 	return dv;
 }
