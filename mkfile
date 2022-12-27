@@ -15,6 +15,7 @@ OFILES=\
 	text.$O			\
 	message.$O		\
 	glob.$O			\
+	fops.$O			\
 	utils.$O
 
 </sys/src/cmd/mkone

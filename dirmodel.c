@@ -48,6 +48,13 @@ dirmodelreload(Dirmodel *m)
 }
 
 void
+dirmodelreloadifsame(Dirmodel *m, Dirmodel *o)
+{
+	if(strcmp(m->path, o->path) == 0)
+		dirmodelreload(o);
+}
+
+void
 dirmodelcd(Dirmodel *m, char *p)
 {
 	char newpath[1024] = {0};
@@ -134,4 +141,31 @@ dirmodelfilter(Dirmodel *m, char *p)
 	memset(m->sel, 0, m->ndirs * sizeof(uchar));
 	m->filter = strdup(p);
 	sendul(m->c, 1);
+}
+
+long
+dirmodelmarklist(Dirmodel *m, Dir **d)
+{
+	int i, j;
+	long n, ndirs;
+	Dir *dirs;
+
+	n = 0;
+	ndirs = m->ndirs;
+	dirs = m->dirs;
+	if(m->filter){
+		ndirs = m->fndirs;
+		dirs = m->fdirs;
+	}
+	for(i = 0; i < ndirs; i++)
+		n += m->sel[i];
+	if(n == 0)
+		return 0;
+	*d = emalloc(n*sizeof(Dir));
+	j = 0;
+	for(i = 0; i < ndirs; i++){
+		if(m->sel[i])
+			(*d)[j++] = dirs[i];
+	}
+	return n;
 }

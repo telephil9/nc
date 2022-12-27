@@ -99,25 +99,3 @@ abspath(char *wd, char *p)
 	cleanname(s);
 	return s;
 }
-
-int
-mkdir(char *wd, char *name)
-{
-	char *p;
-	int fd;
-	
-	p = abspath(wd, name);
-	if(access(p, 0) >= 0){
-		werrstr("directory already exists");
-		free(p);
-		return -1;
-	}
-	fd = create(p, OREAD, DMDIR|0755);
-	if(fd < 0){
-		free(p);
-		return -1;
-	}
-	free(p);
-	close(fd);
-	return 0;
-}

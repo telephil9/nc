@@ -116,8 +116,10 @@ Dirmodel*	mkdirmodel(char*);
 Dir			dirmodelgetdir(Dirmodel*, int);
 long		dirmodelcount(Dirmodel*);
 void		dirmodelreload(Dirmodel*);
+void		dirmodelreloadifsame(Dirmodel*, Dirmodel*);
 void		dirmodelcd(Dirmodel*, char*);
 void		dirmodelfilter(Dirmodel*, char*);
+long		dirmodelmarklist(Dirmodel*, Dir**);
 
 Dirpanel*	mkdirpanel(Dirmodel*);
 void		dirpanelsetrect(Dirpanel*, Rectangle);
@@ -148,6 +150,11 @@ void		setupviewerbindings(void);
 int			match(char*, char*);
 
 int			message(int, const char*, Mousectl*, Keyboardctl*);
+void		errormessage(char*, Mousectl*, Keyboardctl*);
+
+int			mkdir(char*, char*);
+int			rm(char*, Dir);
+int			rmdir(char*);
 
 Rectangle	boundsrect(Rectangle);
 Image*		ealloccolor(ulong);
@@ -156,7 +163,6 @@ void*		erealloc(void*, ulong);
 char*		slurp(char*);
 char*		homedir(void);
 char*		abspath(char*, char*);
-int			mkdir(char*, char*);
 
 enum
 {

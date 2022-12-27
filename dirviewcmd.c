@@ -58,14 +58,14 @@ cmdrenmov(void)
 {
 	Dirpanel *p;
 	Dir d, null;
-	char errbuf[64+ERRMAX], opath[1024] = {0}, buf[255] = {0};
+	char opath[1024] = {0}, buf[255] = {0};
 	int n;
 
 	p = dirviewcurrentpanel(dview);
 	if(strcmp(p->model->path, dirviewotherpanel(dview)->model->path) == 0){
 		d = dirmodelgetdir(p->model, dirpanelselectedindex(p));
 		if(d.qid.type&QTDIR){
-			message(Derror, "cannot rename directories.", mc, kc);
+			errormessage("cannot rename directories.", mc, kc);
 			return;
 		}
 		snprint(buf, sizeof buf, d.name);
@@ -77,15 +77,14 @@ cmdrenmov(void)
 		nulldir(&null);
 		null.name = buf;
 		if(dirwstat(opath, &null) < 0){
-			snprint(errbuf, sizeof errbuf, "rename failed: %r");
-			message(Derror, errbuf, mc, kc);
+			errormessage("rename failed: %r", mc, kc);
 		}else{
 			dirmodelreload(p->model);
 			dirmodelreload(dirviewotherpanel(dview)->model);
 		}			
 		return;
 	}
-};
+}
 
 static void
 cmdmkdir(void)
@@ -97,16 +96,51 @@ cmdmkdir(void)
 	if(enter("new dir:", buf, sizeof buf, mc, kc, nil) <= 0)
 		return;
 	if(mkdir(p->model->path, buf) < 0){
-		fprint(2, "mkdir: %r\n");
+		errormessage("directory creation failed: %r", mc, kc);
 		return;
 	}
 	dirmodelreload(p->model);
+	dirmodelreloadifsame(p->model, dirviewotherpanel(dview)->model);
 }
 
 static void
 cmddelete(void)
 {
-	fprint(2, "TODO: delete\n");
+	Dirpanel *p;
+	Dir *md, d;
+	char buf[1024] = {0}, *path;
+	long nd;
+	int n;
+
+	p = dirviewcurrentpanel(dview);
+	path = p->model->path;
+	nd = dirmodelmarklist(p->model, &md);
+	if(nd != 0){
+		snprint(buf, sizeof buf, "delete %ld files/directories ?", nd);
+		if(message(Dconfirm, buf, mc, kc) == Bno)
+			return;
+		for(n = 0; n < nd; n++){
+			d = md[n];
+			if(rm(path, d) < 0){
+				errormessage("delete failed: %r", mc, kc);
+				return;
+			}
+		}
+	}else{
+		n = dirpanelselectedindex(p);
+		if(n == 0 && !p->model->isroot) /* up dir */
+			return;
+		d = dirmodelgetdir(p->model, n);
+		snprint(buf, sizeof buf, "delete %s '%s' ?", (d.qid.type&QTDIR) ? "directory" : "file", d.name);
+		if(message(Dconfirm, buf, mc, kc) == Bno)
+			return;
+		if(rm(path, d) < 0){
+			errormessage("delete failed: %r", mc, kc);
+			return;
+		}
+	}
+	dirmodelreload(p->model);
+	dirmodelreloadifsame(p->model, dirviewotherpanel(dview)->model);
 }
 
 static void
