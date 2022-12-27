@@ -17,10 +17,14 @@ Installation:
 Missing features:
 -----------------
 nc is in early alpha stage and all features are not yet implemented:
-- dirview: text can overflow columns
-- most file ops are not implemented (copy, move, ...)
-- no sorting
-- ...
+- [x] delete
+- [x] rename
+- [ ] move
+- [ ] copy
+- [ ] other sort methods (like size, mtime, ...)
+- [ ] text overflow (certainly everywhere)
+- [ ] new input dialog
+- [ ] maybe some progress dialog for file operations
 
 Author:
 -------
