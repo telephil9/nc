@@ -23,7 +23,7 @@ nc is in early alpha stage and all features are not yet implemented:
 - [ ] copy
 - [ ] other sort methods (like size, mtime, ...)
 - [ ] text overflow (certainly everywhere)
-- [ ] new input dialog
+- [x] new input dialog
 - [ ] maybe some progress dialog for file operations
 
 Author:
