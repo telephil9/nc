@@ -65,7 +65,7 @@ cmdcopy(void)
 		for(n = 0; n < nd; n++){
 			d = md[n];
 			if(cp(p->model->path, d, o->model->path, nil) < 0){
-				errormessage("copy failed", mc, kc);
+				errormessage("copy failed: %r", mc, kc);
 				return;
 			}
 		}
@@ -79,7 +79,7 @@ cmdcopy(void)
 		if(message(Dconfirm, buf, mc, kc) == Bno)
 			return;
 		if(cp(p->model->path, d, o->model->path, nil) < 0){
-			errormessage("copy failed", mc, kc);
+			errormessage("copy failed: %r", mc, kc);
 			return;
 		}
 	}
