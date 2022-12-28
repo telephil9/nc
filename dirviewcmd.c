@@ -50,7 +50,40 @@ cmdplumb(void)
 static void
 cmdcopy(void)
 {
-	fprint(2, "TODO: copy\n");
+	Dirpanel *p, *o;
+	Dir *md, d;
+	int nd, n;
+	char buf[1024] = {0};
+	
+	p = dirviewcurrentpanel(dview);
+	o = dirviewotherpanel(dview);
+	nd = dirmodelmarklist(p->model, &md);
+	if(nd != 0){
+		snprint(buf, sizeof buf, "copy %d files/directories ?", nd);
+		if(message(Dconfirm, buf, mc, kc) == Bno)
+			return;
+		for(n = 0; n < nd; n++){
+			d = md[n];
+			if(cp(p->model->path, d, o->model->path, nil) < 0){
+				errormessage("copy failed", mc, kc);
+				return;
+			}
+		}
+	}else{
+		n = dirpanelselectedindex(p);
+		if(n == 0 && !p->model->isroot) /* up dir */
+			return;
+		d = dirmodelgetdir(p->model, n);
+		snprint(buf, sizeof buf, "copy %s '%s' to '%s' ?", 
+			(d.qid.type&QTDIR) ? "directory" : "file", d.name, o->model->path);
+		if(message(Dconfirm, buf, mc, kc) == Bno)
+			return;
+		if(cp(p->model->path, d, o->model->path, nil) < 0){
+			errormessage("copy failed", mc, kc);
+			return;
+		}
+	}
+	dirmodelreload(o->model);
 }
 
 static void

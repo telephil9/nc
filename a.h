@@ -157,6 +157,7 @@ int			input(char*, char*, int, Mousectl*, Keyboardctl*);
 int			mkdir(char*, char*);
 int			rm(char*, Dir);
 int			rmdir(char*);
+int			cp(char*, Dir, char*, char*);
 
 Rectangle	boundsrect(Rectangle);
 Image*		ealloccolor(ulong);
