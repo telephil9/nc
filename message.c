@@ -143,5 +143,5 @@ errormessage(char *msg, Mousectl *mc, Keyboardctl *kc)
 	char errbuf[64+ERRMAX] = {0};
 	
 	snprint(errbuf, sizeof errbuf, msg);
-	message(Derror, msg, mc, kc);
+	message(Derror, errbuf, mc, kc);
 }
