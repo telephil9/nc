@@ -94,34 +94,66 @@ cmdcopy(void)
 static void
 cmdrenmov(void)
 {
-	Dirpanel *p;
-	Dir d, null;
+	Dirpanel *p, *o;
+	Dir *d, null;
 	char opath[1024] = {0}, buf[255] = {0};
-	int n;
+	int i, n;
 
 	p = dirviewcurrentpanel(dview);
-	if(strcmp(p->model->path, dirviewotherpanel(dview)->model->path) == 0){
-		d = dirmodelgetdir(p->model, dirpanelselectedindex(p));
-		if(d.qid.type&QTDIR){
-			errormessage("cannot rename directories.", mc, kc);
+	o = dirviewotherpanel(dview);
+	n = dirlist(p, &d);
+	if(dirmodeleq(p->model, o->model)){
+		if(n > 1){
+			errormessage("cannot rename multiple files/directories.", mc, kc);
 			return;
 		}
-		snprint(buf, sizeof buf, d.name);
+		snprint(buf, sizeof buf, d[0].name);
 		if((n = input("rename to:", buf, sizeof buf, mc, kc)) <= 0)
 			return;
-		if(strncmp(buf, d.name, n) == 0)
+		if(strncmp(buf, d[0].name, n) == 0){
+			errormessage("target file name should be different.", mc, kc);
 			return;
-		snprint(opath, sizeof opath, "%s/%s", p->model->path, d.name);
-		nulldir(&null);
-		null.name = buf;
-		if(dirwstat(opath, &null) < 0){
-			errormessage("rename failed: %r", mc, kc);
+		}
+		if(d[0].qid.type&QTDIR){
+			if(cp(p->model->path, d[0], o->model->path, buf) < 0){
+				errormessage("rename failed: %r", mc, kc);
+				return;
+			}
+			if(rm(p->model->path, d[0]) < 0){
+				errormessage("rename failed: %r", mc, kc);
+				return;
+			}
 		}else{
-			dirmodelreload(p->model);
-			dirmodelreload(dirviewotherpanel(dview)->model);
-		}			
-		return;
+			snprint(opath, sizeof opath, "%s/%s", p->model->path, d[0].name);
+			nulldir(&null);
+			null.name = buf;
+			if(dirwstat(opath, &null) < 0){
+				errormessage("rename failed: %r", mc, kc);
+				return;
+			}
+		}
+	}else{
+		if(n == 1)
+			snprint(buf, sizeof buf, "move %s '%s' to '%s' ?", 
+				(d[0].qid.type&QTDIR) ? "directory" : "file", d[0].name, o->model->path);
+		else
+			snprint(buf, sizeof buf, "move %d files/directories ?", n);
+		if(message(Dconfirm, buf, mc, kc) == Bno)
+			return;
+		for(i = 0; i < n; i++){
+			if(cp(p->model->path, d[i], o->model->path, nil) < 0){
+				errormessage("move failed: %r", mc, kc);
+				return;
+			}
+			if(rm(p->model->path, d[i]) < 0){
+				errormessage("move failed: %r", mc, kc);
+				return;
+			}
+		}
 	}
+	dirmodelreload(p->model);
+	dirmodelreload(o->model);		
+	return;	
 }
 
 static void
@@ -144,41 +176,28 @@ cmdmkdir(void)
 static void
 cmddelete(void)
 {
-	Dirpanel *p;
-	Dir *md, d;
-	char buf[1024] = {0}, *path;
-	long nd;
-	int n;
+	Dirpanel *p, *o;
+	Dir *d;
+	char buf[1024] = {0};
+	int i, n;
 
 	p = dirviewcurrentpanel(dview);
-	path = p->model->path;
-	nd = dirmodelmarklist(p->model, &md);
-	if(nd != 0){
-		snprint(buf, sizeof buf, "delete %ld files/directories ?", nd);
-		if(message(Dconfirm, buf, mc, kc) == Bno)
-			return;
-		for(n = 0; n < nd; n++){
-			d = md[n];
-			if(rm(path, d) < 0){
-				errormessage("delete failed: %r", mc, kc);
-				return;
-			}
-		}
-	}else{
-		n = dirpanelselectedindex(p);
-		if(n == 0 && !p->model->isroot) /* up dir */
-			return;
-		d = dirmodelgetdir(p->model, n);
-		snprint(buf, sizeof buf, "delete %s '%s' ?", (d.qid.type&QTDIR) ? "directory" : "file", d.name);
-		if(message(Dconfirm, buf, mc, kc) == Bno)
-			return;
-		if(rm(path, d) < 0){
+	o = dirviewotherpanel(dview);
+	n = dirlist(p, &d);
+	if(n == 1)
+		snprint(buf, sizeof buf, "delete %s '%s' ?", (d[0].qid.type&QTDIR) ? "directory" : "file", d[0].name);
+	else
+		snprint(buf, sizeof buf, "delete %d files/directories ?", n);
+	if(message(Dconfirm, buf, mc, kc) == Bno)
+		return;
+	for(i = 0; i < n; i++){
+		if(rm(p->model->path, d[i]) < 0){
 			errormessage("delete failed: %r", mc, kc);
 			return;
 		}
 	}
 	dirmodelreload(p->model);
-	dirmodelreloadifsame(p->model, dirviewotherpanel(dview)->model);
+	dirmodelreloadifsame(p->model, o->model);
 }
 
 static void
