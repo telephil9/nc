@@ -1,5 +1,22 @@
 #include "a.h"
 
+static long
+dirlist(Dirpanel *p, Dir **d)
+{
+	long n;
+
+	n = dirmodelmarklist(p->model, d);
+	if(n == 0){
+		n = dirpanelselectedindex(p);
+		if(n == 0 && !p->model->isroot) /* up dir */
+			return 0;
+		*d = emalloc(sizeof(Dir));
+		**d = dirmodelgetdir(p->model, n);
+		n = 1;
+	}
+	return n;
+}
+
 static void
 cmdhelp(void)
 {
@@ -51,34 +68,22 @@ static void
 cmdcopy(void)
 {
 	Dirpanel *p, *o;
-	Dir *md, d;
+	Dir *d;
 	int nd, n;
 	char buf[1024] = {0};
 	
 	p = dirviewcurrentpanel(dview);
 	o = dirviewotherpanel(dview);
-	nd = dirmodelmarklist(p->model, &md);
-	if(nd != 0){
-		snprint(buf, sizeof buf, "copy %d files/directories ?", nd);
-		if(message(Dconfirm, buf, mc, kc) == Bno)
-			return;
-		for(n = 0; n < nd; n++){
-			d = md[n];
-			if(cp(p->model->path, d, o->model->path, nil) < 0){
-				errormessage("copy failed: %r", mc, kc);
-				return;
-			}
-		}
-	}else{
-		n = dirpanelselectedindex(p);
-		if(n == 0 && !p->model->isroot) /* up dir */
-			return;
-		d = dirmodelgetdir(p->model, n);
+	nd = dirlist(p, &d);
+	if(nd == 1)
 		snprint(buf, sizeof buf, "copy %s '%s' to '%s' ?", 
-			(d.qid.type&QTDIR) ? "directory" : "file", d.name, o->model->path);
-		if(message(Dconfirm, buf, mc, kc) == Bno)
-			return;
-		if(cp(p->model->path, d, o->model->path, nil) < 0){
+			(d[0].qid.type&QTDIR) ? "directory" : "file", d[0].name, o->model->path);
+	else
+		snprint(buf, sizeof buf, "copy %d files/directories ?", nd);
+	if(message(Dconfirm, buf, mc, kc) == Bno)
+		return;
+	for(n = 0; n < nd; n++){
+		if(cp(p->model->path, d[n], o->model->path, nil) < 0){
 			errormessage("copy failed: %r", mc, kc);
 			return;
 		}
