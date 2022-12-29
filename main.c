@@ -1,5 +1,7 @@
 #include "a.h"
 
+int			mainstacksize = 32768;
+
 Image		*cols[Ncols];
 Image		*tick;
 Mousectl	*mc;
