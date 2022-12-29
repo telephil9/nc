@@ -20,9 +20,9 @@ nc is in early alpha stage and all features are not yet implemented:
 - [x] delete
 - [x] rename
 - [ ] move
-- [ ] copy
+- [x] copy
 - [ ] other sort methods (like size, mtime, ...)
-- [ ] text overflow (certainly everywhere)
+- [x] text overflow (certainly everywhere)
 - [x] new input dialog
 - [ ] maybe some progress dialog for file operations
 

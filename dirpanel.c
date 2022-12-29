@@ -42,6 +42,30 @@ dirpanelsetrect(Dirpanel *p, Rectangle r)
 }
 
 void
+drawfname(Dirpanel *p, Point pt, Image *f, char *t, int xmax)
+{
+	char *s;
+	Rune r;
+	int i;
+	
+	s = t;
+	for(i = 0; *s && i < 2; i++){
+		s += chartorune(&r, s);
+		pt = runestringn(p->b, pt, f, ZP, font, &r, 1);
+	}
+	if(*s && (pt.x + stringwidth(font, s) > xmax)){
+		chartorune(&r, "~");
+		pt = runestringn(p->b, pt, f, ZP, font, &r, 1);
+		while(*s && (pt.x + stringwidth(font, s) > xmax))
+			++s;
+	}
+	while(*s){
+		s += chartorune(&r, s);
+		pt = runestringn(p->b, pt, f, ZP, font, &r, 1);
+	}
+}
+
+void
 drawline(Dirpanel *p, int index) 
 {
 	Rectangle r;
@@ -67,7 +91,7 @@ drawline(Dirpanel *p, int index)
 	draw(p->b, r, b, nil, ZP);
 	pt = addpt(r.min, Pt(4, 1));
 	pt = string(p->b, pt, f, ZP, font, (d.qid.type&QTDIR) ? "/" : " ");
-	string(p->b, pt, f, ZP, font, d.name);
+	drawfname(p, pt, f, d.name, p->colw[0] - 4);
 	pt.x = p->filesr.min.x + p->colw[0] + 4;
 	snprint(buf, sizeof buf, "%*lld", 6, d.length);
 	string(p->b, pt, f, ZP, font, buf);
@@ -82,6 +106,25 @@ drawline(Dirpanel *p, int index)
 	line(p->b, pr, pt, 0, 0, 0, cols[Cborder], ZP);
 }
 
+int
+sizecolwidth(Dirpanel *p)
+{
+	vlong m;
+	int i, n;
+	Dir d;
+	
+	m = 1;
+	for(i = 0; i < dirmodelcount(p->model); i++){
+		d = dirmodelgetdir(p->model, i);
+		if(d.length > m)
+			m = d.length;
+	}
+	n = 6;
+	if(m != 0) n = 1 + log(m)/log(10);
+	if(n < 6)  n = 6;
+	return n * stringwidth(font, "0");
+}
+
 void
 dirpanelredraw(Dirpanel *p)
 {
@@ -91,7 +134,7 @@ dirpanelredraw(Dirpanel *p)
 	int i;
 
 	p->colw[2] = 4 + stringwidth(font, "XXX 99 99:99") + 4;
-	p->colw[1] = 4 + stringwidth(font, "000000") + 4;
+	p->colw[1] = 4 + sizecolwidth(p) + 4;
 	p->colw[0] = Dx(p->filesr) - (p->colw[1] + p->colw[2]);
 	r = boundsrect(p->r);
 	if(p->b == nil)
