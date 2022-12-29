@@ -159,6 +159,7 @@ int			rm(char*, Dir);
 int			rmdir(char*);
 int			cp(char*, Dir, char*, char*);
 
+int			wresize(int, int);
 Rectangle	boundsrect(Rectangle);
 Image*		ealloccolor(ulong);
 void*		emalloc(ulong);

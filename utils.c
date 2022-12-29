@@ -99,3 +99,21 @@ abspath(char *wd, char *p)
 	cleanname(s);
 	return s;
 }
+
+int
+wresize(int w, int h)
+{
+	int fd, n;
+	char buf[255];
+
+	fd = open("/dev/wctl", OWRITE|OCEXEC);
+	if(fd < 0)
+		return -1;
+	n = snprint(buf, sizeof buf, "resize -dx %d -dy %d", w, h);
+	if(write(fd, buf, n) != n){
+		close(fd);
+		return -1;
+	}
+	close(fd);
+	return 0;
+}

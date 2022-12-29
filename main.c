@@ -9,6 +9,7 @@ Dirview		*dview;
 Text		*text;
 Actionbar	*abar;
 Binding		*bindings;
+Point		minbounds;
 
 void
 colsinit(void)
@@ -53,12 +54,24 @@ redraw(void)
 	flushimage(display, 1);
 }
 
+int
+max(int x, int y)
+{
+	if(x > y)
+		return x;
+	return y;
+}
+
 void
 resize(void)
 {
 	Rectangle dr, ar;
-	int ah;
+	int ah, sx, sy;
 	
+	sx = Dx(screen->r) + 2*4; /* 4 is rio window border width */
+	sy = Dy(screen->r) + 2*4;
+	if((sx < minbounds.x) || (sy < minbounds.y))
+		wresize(max(sx, minbounds.x), max(sy, minbounds.y));
 	ah = 2+font->height+2;
 	dr = screen->r;
 	dr.max.y -= ah;
@@ -160,6 +173,7 @@ threadmain(int argc, char **argv)
 	abar = mkactionbar();
 	colsinit();
 	tickinit();
+	minbounds = Pt(10*9*stringwidth(font, "X"), 10*font->height); /* 10*9 is 10 action buttons with max 9 chars */
 	resize();
 	setmode(Mdir);
 	alts[Emouse].c = mc->c;
