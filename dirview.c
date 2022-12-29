@@ -54,6 +54,10 @@ dirviewemouse(Dirview *v, Mouse m)
 	if((ptinrect(m.xy, v->leftp->r) && !v->leftp->focused) 
 	|| (ptinrect(m.xy, v->rightp->r) && !v->rightp->focused))
 		switchfocus(v);
+	if(ptinrect(m.xy, v->leftp->r) && v->leftp->focused)
+		dirpanelemouse(v->leftp, m);
+	else if(ptinrect(m.xy, v->rightp->r) && v->rightp->focused)
+		dirpanelemouse(v->rightp, m);
 }
 
 Dirview*

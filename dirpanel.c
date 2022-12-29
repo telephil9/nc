@@ -176,8 +176,19 @@ dirpanelredrawnotify(Dirpanel *p)
 }
 
 void
-dirpanelemouse(Dirpanel*, Mouse)
+dirpanelemouse(Dirpanel *p, Mouse m)
 {
+	Point pt;
+	int n;
+
+	pt = subpt(m.xy, screen->r.min);
+	if((m.buttons&1) && ptinrect(pt, p->filesr)){
+		n = (pt.y - p->filesr.min.y) / (font->height+2);
+		if(n != p->cursor && n < p->nlines){
+			p->cursor = n;
+			dirpanelredrawnotify(p);
+		}
+	}
 }
 
 void
