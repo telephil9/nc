@@ -177,3 +177,9 @@ dirmodelmarklist(Dirmodel *m, Dir **d)
 	}
 	return n;
 }
+
+int
+dirmodeleq(Dirmodel *a, Dirmodel *b)
+{
+	return strcmp(a->path, b->path) == 0;
+}

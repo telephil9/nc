@@ -121,6 +121,7 @@ void		dirmodelreloadifsame(Dirmodel*, Dirmodel*);
 void		dirmodelcd(Dirmodel*, char*);
 void		dirmodelfilter(Dirmodel*, char*);
 long		dirmodelmarklist(Dirmodel*, Dir**);
+int			dirmodeleq(Dirmodel*, Dirmodel*);
 
 Dirpanel*	mkdirpanel(Dirmodel*);
 void		dirpanelsetrect(Dirpanel*, Rectangle);
