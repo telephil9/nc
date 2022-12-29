@@ -13,13 +13,13 @@ max(int a, int b)
 }
 
 void
-button(Image *b, Rectangle br, char *label)
+button(Image *b, Rectangle br, char *label, int focus)
 {
 	Point p;
 	int dx;
 
 	dx = (Dx(br) - stringwidth(font, label)) / 2;
-	border(b, br, 2, cols[Csel], ZP);
+	border(b, br, 2, focus ? cols[Ctitle] : cols[Csel], ZP);
 	p = addpt(br.min, Pt(dx, 0.25*font->height));
 	p = stringn(b, p, cols[Ctitle], ZP, font, label, 1);
 	string(b, p, cols[Cfg], ZP, font, label+1);
@@ -32,7 +32,7 @@ message(int type, const char *message, Mousectl *mctl, Keyboardctl *kctl)
 	Rectangle r, br, brn, sc;
 	Point o, p;
 	Image *b, *save, *bg, *fg, *hi;
-	int rc, done, h, w, bw, bh, mw;
+	int rc, done, h, w, bw, bh, mw, focus;
 	Mouse m;
 	Rune k;
 
@@ -47,6 +47,7 @@ message(int type, const char *message, Mousectl *mctl, Keyboardctl *kctl)
 	alts[2].v  = nil;
 	while(nbrecv(kctl->c, nil)==1)
 		;
+	focus = 0;
 	rc = Bno;
 	bg = cols[Cdialog];
 	fg = cols[Cfg];
@@ -78,10 +79,10 @@ message(int type, const char *message, Mousectl *mctl, Keyboardctl *kctl)
 		string(b, p, fg, ZP, font, message);
 		p.y += Padding+1.5*font->height;
 		br = rectaddpt(Rect(0, 0, bw, bh), addpt(o, Pt(Border+Padding, Border+Padding+2*font->height+Padding)));
-		button(b, br, type == Dconfirm ? "Yes" : "Ok");
+		button(b, br, type == Dconfirm ? "Yes" : "Ok", focus == 0);
 		if(type == Dconfirm){
 			brn = rectaddpt(br, Pt(bw+Padding, 0));
-			button(b, brn, "No");
+			button(b, brn, "No", focus == 1);
 		}
 		flushimage(display, 1);
 		if(b!=screen || !eqrect(screen->clipr, sc)){
@@ -96,7 +97,9 @@ message(int type, const char *message, Mousectl *mctl, Keyboardctl *kctl)
 			continue;
 			break;
 		case 1:
-			if((type == Dinfo || type == Derror) && (k == 'o' || k == 'O')){
+			if(k == '\t')
+				focus = (focus + 1) % 2;
+			else if((type == Dinfo || type == Derror) && (k == 'o' || k == 'O')){
 				done = 1;
 				rc = Byes;
 			}else if(type == Dconfirm && (k == 'y' || k == 'Y')){
@@ -104,7 +107,7 @@ message(int type, const char *message, Mousectl *mctl, Keyboardctl *kctl)
 				rc = Byes;
 			}else if(k == '\n'){
 				done = 1;
-				rc = Byes;
+				rc = focus == 0 ? Byes : Bno;
 			}else if(type == Dconfirm && (k == 'n' || k == 'N')){
 				done = 1;
 				rc = Bno;
