@@ -16,15 +16,8 @@ Installation:
 
 Missing features:
 -----------------
-nc is in early alpha stage and all features are not yet implemented:
-- [x] delete
-- [x] rename
-- [ ] move
-- [x] copy
-- [ ] other sort methods (like size, mtime, ...)
-- [x] text overflow (certainly everywhere)
-- [x] new input dialog
-- [ ] maybe some progress dialog for file operations
+Most (used/useful) features from mc are implemented.
+If you miss anything, please drop me an email so that I can it.
 
 Author:
 -------
