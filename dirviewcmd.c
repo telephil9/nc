@@ -346,6 +346,8 @@ cmdup(void)
 		return;
 	if(p->cursor == 0){
 		p->offset -= p->nlines;
+		if(p->offset < 0)
+			p->offset = 0;
 		p->cursor = p->nlines -1;
 	}else{
 		p->cursor -= 1;
@@ -366,6 +368,8 @@ cmddown(void)
 	if(p->cursor == p->nlines - 1){
 		p->offset += p->nlines;
 		p->cursor = 0;
+		if(dirmodelcount(p->model)-p->offset < p->nlines)
+			p->offset = dirmodelcount(p->model) - p->nlines;
 	}else{
 		p->cursor += 1;
 	}
@@ -389,6 +393,10 @@ cmdend(void)
 
 	p = dirviewcurrentpanel(dview);
 	p->offset = p->nlines * (dirmodelcount(p->model) / p->nlines);
+	if(dirmodelcount(p->model)-p->offset < p->nlines)
+		p->offset = dirmodelcount(p->model) - p->nlines;
+	if(p->offset < 0)
+		p->offset = 0;
 	p->cursor = dirmodelcount(p->model) - p->offset - 1;
 	dirpanelredrawnotify(p);
 }
@@ -405,6 +413,8 @@ cmdpageup(void)
 		p->cursor = 0;
 	else
 		p->offset -= p->nlines;
+	if(p->offset < 0)
+		p->offset = 0;
 	dirpanelredrawnotify(p);
 }
 
@@ -418,9 +428,11 @@ cmdpagedown(void)
 	end = dirmodelcount(p->model) - p->offset - 1;
 	if(p->offset + p->nlines >= dirmodelcount(p->model) && p->cursor == end)
 		return;
-	if(p->offset + p->nlines < dirmodelcount(p->model))
+	if(p->offset + p->nlines < dirmodelcount(p->model)){
 		p->offset += p->nlines;
-	else
+		if(dirmodelcount(p->model)-p->offset < p->nlines)
+			p->offset = dirmodelcount(p->model) - p->nlines;		
+	}else
 		p->cursor = end;
 	if(p->cursor > end)
 		p->cursor = end;
