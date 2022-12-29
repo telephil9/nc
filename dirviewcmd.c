@@ -108,9 +108,9 @@ cmdrenmov(void)
 			return;
 		}
 		snprint(buf, sizeof buf, d[0].name);
-		if((n = input("rename to:", buf, sizeof buf, mc, kc)) <= 0)
+		if(input("rename to:", buf, sizeof buf, mc, kc) <= 0)
 			return;
-		if(strncmp(buf, d[0].name, n) == 0){
+		if(strcmp(buf, d[0].name) == 0){
 			errormessage("target file name should be different.", mc, kc);
 			return;
 		}
