@@ -2,6 +2,7 @@
 
 int			mainstacksize = 32768;
 
+int			bmode;
 Image		*cols[Ncols];
 Image		*tick;
 Mousectl	*mc;
@@ -16,14 +17,25 @@ Point		minbounds;
 void
 colsinit(void)
 {
-	cols[Cbg] = display->white;
-	cols[Cfg] = display->black;
-	cols[Clfg] = ealloccolor(0x666666FF);
-	cols[Ctitle] = ealloccolor(DGreygreen);
-	cols[Cborder] = ealloccolor(0xAAAAAAFF);
-	cols[Csel] = ealloccolor(0xCCCCCCFF);
-	cols[Cerror] = ealloccolor(0x721c24ff);
-	cols[Cdialog] = ealloccolor(0xFAFAFAFF);
+	if(!bmode){
+		cols[Cbg] = display->white;
+		cols[Cfg] = display->black;
+		cols[Clfg] = ealloccolor(0x666666FF);
+		cols[Ctitle] = ealloccolor(DGreygreen);
+		cols[Cborder] = ealloccolor(0xAAAAAAFF);
+		cols[Csel] = ealloccolor(0xCCCCCCFF);
+		cols[Cerror] = ealloccolor(0x721c24ff);
+		cols[Cdialog] = ealloccolor(0xFAFAFAFF);
+	}else{
+		cols[Cbg] = display->black;
+		cols[Cfg] = display->white;
+		cols[Clfg] = ealloccolor(0xAAAAAAFF^1);
+		cols[Ctitle] = ealloccolor(DPurpleblue);
+		cols[Cborder] = ealloccolor(0x333333FF);
+		cols[Csel] = ealloccolor(0x666666FF);
+		cols[Cerror] = ealloccolor(DRed);
+		cols[Cdialog] = ealloccolor(0x1A1A1AFF);
+	}
 }
 
 void
@@ -123,6 +135,13 @@ setmode(int m)
 	redraw();
 }
 
+void
+usage(void)
+{
+	fprint(2, "%s [-b]\n", argv0);
+	exits("usage");
+}
+
 enum
 {
 	Emouse,
@@ -157,7 +176,13 @@ threadmain(int argc, char **argv)
 		{ nil, nil,  CHANEND },
 	};
 
+	bmode = 0;
 	ARGBEGIN{
+	case 'b':
+		bmode = 1;
+		break;
+	default:
+		usage();
 	}ARGEND
 	
 	if(initdraw(nil, nil, argv0) < 0)
