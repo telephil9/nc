@@ -74,6 +74,10 @@ cmdcopy(void)
 	
 	p = dirviewcurrentpanel(dview);
 	o = dirviewotherpanel(dview);
+	if(dirmodeleq(p->model, o->model)){
+		errormessage("cannot copy files to the same directory.", mc, kc);
+		return;
+	}
 	nd = dirlist(p, &d);
 	if(nd == 1)
 		snprint(buf, sizeof buf, "copy %s '%s' to '%s' ?", 
