@@ -181,7 +181,7 @@ dirpanelemouse(Dirpanel *p, Mouse m)
 	Point pt;
 	int n;
 
-	pt = subpt(m.xy, screen->r.min);
+	pt = subpt(m.xy, p->r.min);
 	if(!ptinrect(pt, p->filesr))
 		return;
 	if(m.buttons == 1){
