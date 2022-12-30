@@ -143,7 +143,7 @@ dirpanelredraw(Dirpanel *p)
 	b = p->focused ? cols[Ctitle] : cols[Cborder];
 	ir = insetrect(r, 2);
 	border(p->b, ir, 2, b, ZP);
-	pt = string(p->b, addpt(ir.min, Pt(4, 2)), cols[Cfg], ZP, font, p->model->path);
+	pt = string(p->b, addpt(ir.min, Pt(4, 2)), p->focused ? cols[Cfg] : cols[Clfg], ZP, font, p->model->path);
 	if(p->model->filter != nil){
 		pt = string(p->b, pt, cols[Clfg], ZP, font, " [");
 		pt = string(p->b, pt, cols[Cfg], ZP, font, p->model->filter);
