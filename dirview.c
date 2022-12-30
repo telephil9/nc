@@ -49,7 +49,7 @@ switchfocus(Dirview *v)
 void
 dirviewemouse(Dirview *v, Mouse m)
 {
-	if(m.buttons != 1)
+	if(!m.buttons)
 		return;
 	if((ptinrect(m.xy, v->leftp->r) && !v->leftp->focused) 
 	|| (ptinrect(m.xy, v->rightp->r) && !v->rightp->focused))

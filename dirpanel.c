@@ -182,11 +182,19 @@ dirpanelemouse(Dirpanel *p, Mouse m)
 	int n;
 
 	pt = subpt(m.xy, screen->r.min);
-	if((m.buttons&1) && ptinrect(pt, p->filesr)){
+	if(!ptinrect(pt, p->filesr))
+		return;
+	if(m.buttons == 1){
 		n = (pt.y - p->filesr.min.y) / (font->height+2);
 		if(n != p->cursor && n < p->nlines){
 			p->cursor = n;
 			dirpanelredrawnotify(p);
+		}
+	}else if(m.buttons == 4){
+		n = (pt.y - p->filesr.min.y) / (font->height+2);
+		if(n < p->nlines){
+			p->cursor = n;
+			cmdview(); /* ugly hack */
 		}
 	}
 }

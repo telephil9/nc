@@ -112,6 +112,7 @@ void		dirviewredraw(Dirview*);
 void		dirviewemouse(Dirview*, Mouse);
 Dirpanel*	dirviewcurrentpanel(Dirview*);
 Dirpanel*	dirviewotherpanel(Dirview*);
+void		cmdview(void);
 
 Dirmodel*	mkdirmodel(char*);
 Dir			dirmodelgetdir(Dirmodel*, int);
