@@ -184,8 +184,10 @@ enum
 	Ctitle,
 	Cborder,
 	Csel,
+	Cselfg,
 	Cerror,
-	Cdialog,
+	Cdlgbg,
+	Cdlgbord,
 	Ncols
 };
 extern Image*		cols[Ncols];

@@ -32,7 +32,7 @@ actionbarredraw(Actionbar *abar)
 		draw(abar->b, wr, cols[Ctitle], nil, ZP);
 		p.x += 2;
 		if(abar->labels[i] != nil)
-			string(abar->b, p, cols[Cfg], ZP, font, abar->labels[i]);
+			string(abar->b, p, cols[Cselfg], ZP, font, abar->labels[i]);
 	}
 }
 

@@ -24,17 +24,21 @@ colsinit(void)
 		cols[Ctitle] = ealloccolor(DGreygreen);
 		cols[Cborder] = ealloccolor(0xAAAAAAFF);
 		cols[Csel] = ealloccolor(0xCCCCCCFF);
+		cols[Cselfg] = display->black;
 		cols[Cerror] = ealloccolor(0x721c24ff);
-		cols[Cdialog] = ealloccolor(0xFAFAFAFF);
+		cols[Cdlgbg] = ealloccolor(0xFAFAFAFF);
+		cols[Cdlgbord] = ealloccolor(0xCCCCCCFF);
 	}else{
 		cols[Cbg] = display->black;
 		cols[Cfg] = display->white;
-		cols[Clfg] = ealloccolor(0xAAAAAAFF^1);
+		cols[Clfg] = ealloccolor(0x666666FF);
 		cols[Ctitle] = ealloccolor(DPurpleblue);
 		cols[Cborder] = ealloccolor(0x333333FF);
-		cols[Csel] = ealloccolor(0x666666FF);
+		cols[Csel] = ealloccolor(DPurpleblue);
+		cols[Cselfg] = display->black;
 		cols[Cerror] = ealloccolor(DRed);
-		cols[Cdialog] = ealloccolor(0x1A1A1AFF);
+		cols[Cdlgbg] = ealloccolor(0x1A1A1AFF);
+		cols[Cdlgbord] = ealloccolor(0x666666FF);
 	}
 }
 

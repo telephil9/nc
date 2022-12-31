@@ -19,7 +19,7 @@ button(Image *b, Rectangle br, char *label, int focus)
 	int dx;
 
 	dx = (Dx(br) - stringwidth(font, label)) / 2;
-	border(b, br, 2, focus ? cols[Ctitle] : cols[Csel], ZP);
+	border(b, br, 2, focus ? cols[Ctitle] : cols[Cdlgbord], ZP);
 	p = addpt(br.min, Pt(dx, 0.25*font->height));
 	p = stringn(b, p, cols[Ctitle], ZP, font, label, 1);
 	string(b, p, cols[Cfg], ZP, font, label+1);
@@ -61,7 +61,7 @@ input(char *ask, char *buf, int nbuf, Mousectl *mctl, Keyboardctl *kctl)
 		;
 	rc = -1;
 	len = strlen(buf);
-	bg = cols[Cdialog];
+	bg = cols[Cdlgbg];
 	fg = cols[Cfg];
 	hi = cols[Ctitle];
 	focus = 0;
@@ -87,7 +87,7 @@ input(char *ask, char *buf, int nbuf, Mousectl *mctl, Keyboardctl *kctl)
 			draw(save, r, b, nil, r.min);
 		}
 		draw(b, r, bg, nil, ZP);
-		border(b, r, Border, cols[Csel], ZP);
+		border(b, r, Border, cols[Cdlgbord], ZP);
 		p = addpt(o, Pt(0, 2));
 		line(b, p, Pt(r.max.x, p.y), 0, 0, 2, hi, ZP);
 		p = addpt(o, Pt(Border+Padding, Border+Padding+0.5*font->height));

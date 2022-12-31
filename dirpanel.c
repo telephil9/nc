@@ -80,10 +80,12 @@ drawline(Dirpanel *p, int index)
 	r.min.y += index * (1 + font->height + 1);
 	r.max.x -= 2;
 	r.max.y = r.min.y + 1 + font->height + 1;
-	b = cols[Cbg];
-	if(index == p->cursor && p->focused)
-		b = cols[Csel];
 	f = cols[Cfg];
+	b = cols[Cbg];
+	if(index == p->cursor && p->focused){
+		f = cols[Cselfg];
+		b = cols[Csel];
+	}
 	if(p->model->sel[p->offset + index])
 		f = cols[Ctitle];
 	else if(!p->focused)
