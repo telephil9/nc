@@ -24,7 +24,7 @@ cmdhelp(void)
 	setmode(Mhelp);
 }
 
-void
+static void
 cmdview(void)
 {
 	Dirpanel *p;

@@ -194,9 +194,12 @@ dirpanelemouse(Dirpanel *p, Mouse m)
 		n = (pt.y - p->filesr.min.y) / (font->height+2);
 		if(n < p->nlines){
 			p->cursor = n;
-			cmdview(); /* ugly hack */
+			sendul(kc->c, L'\n');
 		}
-	}
+	}else if(m.buttons == 8)
+		sendul(kc->c, Kup);
+	else if(m.buttons == 16)
+		sendul(kc->c, Kdown);
 }
 
 void
